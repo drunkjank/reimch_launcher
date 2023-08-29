@@ -16,12 +16,12 @@ class Data with ChangeNotifier {
 
   void _init() async {
     (await DeviceApps.getInstalledApplications(
-        includeAppIcons: true,
-        includeSystemApps: true,
-        onlyAppsWithLaunchIntent: true))
-      .forEach((Application app) {
-        installApp(app);
-      });
+            includeAppIcons: true,
+            includeSystemApps: true,
+            onlyAppsWithLaunchIntent: true))
+        .forEach((Application app) {
+      installApp(app);
+    });
     var prefs = await SharedPreferences.getInstance();
     _favorites = prefs.getStringList('favorites') ?? [];
 

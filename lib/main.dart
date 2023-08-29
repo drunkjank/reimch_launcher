@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:device_apps/device_apps.dart' show Application;
 import 'package:provider/provider.dart';
-import 'src/menu_screen.dart';
+import 'src/main_screen.dart';
 import 'src/data.dart';
 
 void main() {
@@ -26,6 +26,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<Data>(
-        create: (context) => data, child: const MenuScreen());
+        create: (context) => data, child: const MainScreen());
   }
 }
