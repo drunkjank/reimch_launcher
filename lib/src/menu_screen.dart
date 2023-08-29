@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'app_data.dart';
 import 'application_card.dart';
-import 'data.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -13,19 +13,17 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   @override
   Widget build(BuildContext context) {
-    var data = context.watch<Data>();
+    var apps = context.watch<AppData>().apps;
     return PageView(children: [
       Scaffold(
           backgroundColor: Colors.black,
-          body: data.initialized
+          body: apps.isNotEmpty
               ? GridView(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3),
                   children: List.generate(
-                      data.apps.length,
-                      (index) => ApplicationCard(data.apps[index],
-                          favorite: data.favorites
-                              .contains(data.apps[index].packageName))))
+                      apps.length,
+                      (index) => ApplicationCard(apps[index])))
               : const Center(child: CircularProgressIndicator()))
     ]);
   }

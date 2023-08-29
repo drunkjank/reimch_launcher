@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:device_apps/device_apps.dart';
-import 'package:provider/provider.dart';
-import 'data.dart';
 
 class ApplicationCard extends StatefulWidget {
   final Application app;
-  bool favorite;
 
-  ApplicationCard(this.app, {this.favorite = false, super.key});
+  const ApplicationCard(this.app, {super.key});
 
   @override
   State<ApplicationCard> createState() => _ApplicationCardState();
 }
 
 class _ApplicationCardState extends State<ApplicationCard> {
-  bool editMode = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,29 +23,10 @@ class _ApplicationCardState extends State<ApplicationCard> {
           widget.app.openApp();
         },
         onLongPress: () {
-          editMode = !editMode;
+          DeviceApps.uninstallApp(widget.app.packageName);
         },
-        child: editMode
-            ? Column(children: [
-                ElevatedButton(
-                    onPressed: () {
-                      context.watch<Data>().setFavorite(
-                          widget.app.packageName, !widget.favorite);
-                      setState(() {});
-                    },
-                    child: Icon(widget.favorite
-                        ? Icons.push_pin
-                        : Icons.push_pin_outlined)),
-                const SizedBox(height: 5),
-                ElevatedButton(
-                  onPressed: () {
-                    DeviceApps.uninstallApp(widget.app.packageName);
-                    editMode = false;
-                  },
-                  child: const Icon(Icons.delete),
-                )
-              ])
-            : Column(children: [
+        child: 
+            Column(children: [
                 Container(
                   margin: const EdgeInsets.all(10),
                   child: Image.memory((widget.app as ApplicationWithIcon).icon),

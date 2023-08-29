@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:device_apps/device_apps.dart' show Application;
-import 'package:provider/provider.dart';
-import 'src/main_screen.dart';
-import 'src/data.dart';
+import 'src/home_screen.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -17,15 +14,5 @@ void main() {
                     fontSize: 13,
                     fontWeight: FontWeight.bold)),
       ),
-      home: App()));
-}
-
-class App extends StatelessWidget {
-  Data data = Data();
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Data>(
-        create: (context) => data, child: const MainScreen());
-  }
+      home: const HomePage()));
 }
