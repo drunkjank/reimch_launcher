@@ -14,5 +14,5 @@ void main() {
                     fontSize: 13,
                     fontWeight: FontWeight.bold)),
       ),
-      home: const HomePage()));
+      home: HomePage()));
 }
