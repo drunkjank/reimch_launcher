@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:device_apps/device_apps.dart';
+import 'menu_screen.dart';
 import 'application_card.dart';
 import 'data.dart';
 
@@ -26,7 +27,16 @@ class _MainScreenState extends State<MainScreen> {
                         (index) => ApplicationCard(
                             data.apps.where((Application app) =>
                                 app.packageName == data.favorites[index]),
-                            favorite: true)))
+                            favorite: true))),
+                Center(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  (context) => const MenuScreen()));
+                        },
+                        child: const Icon(Icons.menu)))
               ])
             : const Center(child: CircularProgressIndicator()));
   }
