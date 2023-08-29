@@ -15,13 +15,24 @@ class Data with ChangeNotifier {
   }
 
   void _init() async {
-    _apps = await DeviceApps.getInstalledApplications(
+    (await DeviceApps.getInstalledApplications(
         includeAppIcons: true,
         includeSystemApps: true,
-        onlyAppsWithLaunchIntent: true);
+        onlyAppsWithLaunchIntent: true))
+      .forEach((Application app) {
+        installApp(app);
+      });
     var prefs = await SharedPreferences.getInstance();
     _favorites = prefs.getStringList('favorites') ?? [];
-    notifyListeners();
+
+    var events = DeviceApps.listenToAppsChanges();
+    events.listen((ApplicationEvent event) {
+      if (event is ApplicationEventInstall) {
+        installApp(event.app);
+      } else if (event is ApplicationEventUninstall) {
+        removeApp(event.app);
+      }
+    });
   }
 
   void setFavorite(String packageName, bool favorite) {
@@ -31,10 +42,21 @@ class Data with ChangeNotifier {
       favorites.remove(packageName);
     }
     save();
+    notifyListeners();
   }
 
   void save() async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setStringList('favorites', _favorites);
+  }
+
+  void installApp(Application app) {
+    _apps.add(app);
+    notifyListeners();
+  }
+
+  void removeApp(Application app) {
+    _apps.remove(app);
+    setFavorite(app.packageName, false);
   }
 }
