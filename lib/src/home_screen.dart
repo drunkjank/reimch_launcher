@@ -1,24 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'menu_screen.dart';
-import 'app_data.dart';
+import 'package:intl/intl.dart';
+import 'dart:async';
+import 'menu_page.dart';
 
-class HomePage extends StatelessWidget {
-  final AppData appData = AppData();
-
-  HomePage({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(children: [
-        Center(child: Text('REIMCH', style: GoogleFonts.rubikIso().copyWith(fontSize: 50, fontWeight: FontWeight.bold), textAlign: TextAlign.center)),
-        ChangeNotifierProvider<AppData>(
-          create: (context) => appData,
-          child: const MenuScreen()
-        ),
-      ])
-    );
+        backgroundColor: const Color(0xff101010),
+        body: PageView(children: const [HomePage(), MenuPage()]));
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      const Clock(),
+      Text("REIMCH", style: GoogleFonts.notoSans(fontSize: 50)),
+      const SizedBox()
+    ]);
+  }
+}
+
+class Clock extends StatefulWidget {
+  const Clock({super.key});
+
+  @override
+  State<Clock> createState() => _ClockState();
+}
+
+class _ClockState extends State<Clock> {
+  String time = DateFormat('hh.mm a').format(DateTime.now());
+  late Timer _timer;
+
+  @override
+  initState() {
+    super.initState();
+    _timer =
+        Timer.periodic(const Duration(milliseconds: 500), (timer) => _update());
+  }
+
+  void _update() {
+    time = DateFormat('hh.mm a').format(DateTime.now());
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(time, style: GoogleFonts.barlow(fontSize: 30));
   }
 }
