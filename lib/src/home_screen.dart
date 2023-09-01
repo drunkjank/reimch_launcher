@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'menu_page.dart';
+import 'favorites_page.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,7 +12,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: const Color(0xff101010),
-        body: PageView(children: const [HomePage(), MenuPage()]));
+        body: PageView(
+            controller: PageController(initialPage: 1),
+            children: const [FavoritesPage(), HomePage(), MenuPage()]));
   }
 }
 

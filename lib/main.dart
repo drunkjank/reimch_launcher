@@ -5,7 +5,7 @@ void main() {
   runApp(MaterialApp(
       theme: ThemeData(
           brightness: Brightness.dark,
-          primaryColor: Colors.white,
+          // primarySwatch: Colors.green,
           textButtonTheme: const TextButtonThemeData(
               style: ButtonStyle(
                   backgroundColor:
