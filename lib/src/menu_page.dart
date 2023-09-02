@@ -13,6 +13,7 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   Map<String, List<Application>> apps = {};
   bool _initialized = false;
+  String query = '';
 
   _MenuPageState() {
     _init();
@@ -20,13 +21,45 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    var menuSections = <MenuSection>[];
-    for (var key in apps.keys.toList()..sort()) {
-      menuSections.add(MenuSection(key, apps[key]!));
+    var menuSections = <Widget>[];
+    if (query.trim() == '') {
+      for (var key in apps.keys.toList()) {
+        menuSections.add(MenuSection(key, apps[key]!));
+      }
+    } else {
+      var result = <String, List<Application>>{};
+      for (var list in apps.values) {
+        String? key;
+        for (var app in list) {
+          var appName = app.appName.toLowerCase();
+          if (appName.contains(query) || appName.startsWith(query)) {
+            key = app.appName.substring(0, 1).toLowerCase();
+            if (!result.containsKey(key)) {
+              result[key] = [];
+            }
+            result[key]!.add(app);
+          }
+        }
+        if (key != null) {
+          menuSections.add(MenuSection(key, result[key]!));
+        }
+      }
     }
 
     return _initialized
-        ? ListView(children: menuSections)
+        ? ListView(children: menuSections
+            ..insert(0, Container(margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10), child: TextField(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color(0xff202020),
+                border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(30)),
+                hintText: 'Search',
+              ),
+              onChanged: (text) {
+                query = text.toLowerCase();
+                setState(() {});
+              }
+            ))))
         : const Center(child: CircularProgressIndicator());
   }
 
@@ -38,15 +71,13 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   void _sortApps(List<Application> notSortedApps) {
+    notSortedApps.sort((a, b) => a.appName.compareTo(b.appName));
     for (var app in notSortedApps) {
       var firstLetter = app.appName[0].toUpperCase();
       if (!apps.containsKey(firstLetter)) {
         apps[firstLetter] = [];
       }
       apps[firstLetter]!.add(app);
-    }
-    for (var list in apps.values) {
-      list.sort((a, b) => a.packageName.compareTo(b.packageName));
     }
     setState(() {});
   }
