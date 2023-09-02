@@ -38,7 +38,6 @@ class _AppCardState extends State<AppCard> {
             child: Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 3.25),
-                decoration: const BoxDecoration(color: Color(0xff202020)),
                 child: Row(
                   mainAxisAlignment: _editMode
                       ? MainAxisAlignment.spaceEvenly
@@ -86,6 +85,7 @@ class _AppCardState extends State<AppCard> {
                 ))));
   }
 
+  @mustCallSuper
   void _init() async {
     var prefs = await SharedPreferences.getInstance();
     _favorite = (prefs.getStringList('favorites') ?? [])
@@ -93,6 +93,7 @@ class _AppCardState extends State<AppCard> {
     setState(() {});
   }
 
+  @mustCallSuper
   void addToFavorites() async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setStringList('favorites',
@@ -101,6 +102,7 @@ class _AppCardState extends State<AppCard> {
     setState(() {});
   }
 
+  @mustCallSuper
   void removeFromFavorites() async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setStringList(
@@ -109,5 +111,58 @@ class _AppCardState extends State<AppCard> {
           ..remove(widget.app.packageName));
     _favorite = false;
     setState(() {});
+  }
+}
+
+class AppCardWithIcon extends AppCard {
+  const AppCardWithIcon(super.app, {super.key});
+
+  @override
+  State<AppCard> createState() => _AppCardWithIconState();
+}
+
+class _AppCardWithIconState extends _AppCardState {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.all(10),
+        child: TextButton(
+            onPressed: () {
+              widget.app.openApp();
+              pagecontroller.jumpToPage(1);
+            },
+            onLongPress: () {
+              setState(() {
+                _editMode = !_editMode;
+              });
+            },
+            child: Container(
+                margin:
+                    const EdgeInsets.all(12.5),
+                child: Column(
+                  mainAxisAlignment: _editMode
+                      ? MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.center,
+                  children: (_editMode
+                      ? [
+                          Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              child: TextButton(
+                                  onPressed: () {
+                                    if (_favorite) {
+                                      removeFromFavorites();
+                                    } else {
+                                      addToFavorites();
+                                    }
+                                  },
+                                  child: Icon(_favorite
+                                      ? Icons.star
+                                      : Icons.star_outline))),
+                                                  ]
+                      : [
+                              Image.memory((widget.app as ApplicationWithIcon).icon)
+                        ]),
+                ))));
+
   }
 }

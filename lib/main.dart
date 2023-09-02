@@ -9,6 +9,8 @@ void main() {
           textButtonTheme: const TextButtonThemeData(
               style: ButtonStyle(
                   backgroundColor:
-                      MaterialStatePropertyAll(Color(0xff202020))))),
+                      MaterialStatePropertyAll(Color(0xff202020)),
+                  //overlayColor: MaterialStatePropertyAll(Color(0xff202020))
+                  ))),
       home: const HomeScreen()));
 }

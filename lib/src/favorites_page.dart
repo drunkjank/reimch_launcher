@@ -23,9 +23,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return _initialized
         ? Container(
             margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-            child: Column(
+            child: GridView(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                 children: List.generate(
-                    favorites.length, (index) => AppCard(favorites[index]))))
+                    favorites.length, (index) => AppCardWithIcon(favorites[index]))))
         : const Center(child: CircularProgressIndicator());
   }
 
@@ -33,7 +34,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     var prefs = await SharedPreferences.getInstance();
     var packageNames = prefs.getStringList('favorites') ?? [];
     for (var packageName in packageNames) {
-      var app = await DeviceApps.getApp(packageName);
+      var app = await DeviceApps.getApp(packageName, true);
       if (app != null) {
         favorites.add(app);
       } else {
