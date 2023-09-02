@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'pagecontroller.dart';
 
 class AppCard extends StatefulWidget {
   final Application app;
@@ -27,6 +28,7 @@ class _AppCardState extends State<AppCard> {
         child: TextButton(
             onPressed: () {
               widget.app.openApp();
+              pagecontroller.jumpToPage(1);
             },
             onLongPress: () {
               setState(() {
@@ -61,6 +63,7 @@ class _AppCardState extends State<AppCard> {
                               child: TextButton(
                                   onPressed: () {
                                     widget.app.openSettingsScreen();
+                                    pagecontroller.jumpToPage(1);
                                   },
                                   child: const Icon(
                                     Icons.settings,

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'menu_page.dart';
 import 'favorites_page.dart';
+import 'pagecontroller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: const Color(0xff101010),
         body: PageView(
-            controller: PageController(initialPage: 1),
+            controller: pagecontroller,
             children: const [FavoritesPage(), HomePage(), MenuPage()]));
   }
 }
